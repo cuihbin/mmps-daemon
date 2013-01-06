@@ -1,0 +1,1 @@
+Client-server style console message viewer for application running as service. Implements Console interface and communicate through socket.
