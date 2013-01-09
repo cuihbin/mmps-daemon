@@ -18,9 +18,9 @@
   </properties>
 
   <scm>
-    <connection>scm:svn:svn://localhost/com.zzvc.mmps/${project.artifactId}/trunk</connection>
-    <developerConnection>scm:svn:svn://localhost/com.zzvc.mmps/${project.artifactId}/trunk</developerConnection>
-    <url></url>
+    <connection>scm:git:git@github.com:cuihbin/mmps-daemon.git</connection>
+    <developerConnection>scm:git:git@github.com:cuihbin/mmps-daemon.git</developerConnection>
+    <url>https://github.com/cuihbin</url>
   </scm>
 
   <modules>
