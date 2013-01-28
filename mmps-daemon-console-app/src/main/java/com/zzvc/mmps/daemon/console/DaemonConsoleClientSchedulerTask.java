@@ -9,6 +9,11 @@ public class DaemonConsoleClientSchedulerTask extends TaskSupport implements Sch
 	@Resource
 	private DaemonConsoleClient client;
 
+	public DaemonConsoleClientSchedulerTask() {
+		super();
+		pushBundle("DaemonConsoleResources");
+	}
+
 	@Override
 	public void onSchedule() {
 		if (client.needConnect()) {

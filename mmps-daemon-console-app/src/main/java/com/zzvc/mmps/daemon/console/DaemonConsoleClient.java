@@ -34,6 +34,11 @@ public class DaemonConsoleClient extends ConsoleMessageSupport {
     
     private PatternUtil patternUtil;
 
+	public DaemonConsoleClient() {
+		super();
+		pushBundle("DaemonConsoleResources");
+	}
+
 	public void init() {
 		ResourceBundle bundle = ResourceBundle.getBundle("daemon");
 		try {
