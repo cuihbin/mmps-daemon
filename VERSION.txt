@@ -1,3 +1,4 @@
 mmps-daemon-2.0
  + Upgrade apache mina-core
+ + Upgrade mmps-parent to 2.0.2 and related module update
 
