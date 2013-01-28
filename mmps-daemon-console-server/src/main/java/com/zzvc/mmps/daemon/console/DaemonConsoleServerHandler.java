@@ -4,7 +4,6 @@ import static com.zzvc.mmps.daemon.DaemonConstants.DEFAULT_GROUP;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -18,7 +17,7 @@ import java.util.Set;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
 import sun.misc.Signal;
@@ -58,7 +57,7 @@ public class DaemonConsoleServerHandler extends IoHandlerAdapter {
 		
 		acceptor = new NioSocketAcceptor();
 		acceptor.setHandler(this);
-		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("UTF-8"))));
+		acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new ObjectSerializationCodecFactory()));
 		acceptor.getSessionConfig().setReuseAddress(true);
 	}
 

@@ -3,7 +3,6 @@ package com.zzvc.mmps.daemon.console;
 import static com.zzvc.mmps.daemon.DaemonConstants.DEFAULT_GROUP;
 
 import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
 import java.util.ResourceBundle;
 
 import javax.annotation.Resource;
@@ -11,7 +10,7 @@ import javax.annotation.Resource;
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 import com.zzvc.mmps.console.ConsoleMessageSupport;
@@ -53,7 +52,7 @@ public class DaemonConsoleClient extends ConsoleMessageSupport {
 		
 		connector = new NioSocketConnector();
 		connector.setHandler(handler);
-		connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("UTF-8"))));
+		connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new ObjectSerializationCodecFactory()));
 		
 		try {
 			patternUtil = new PatternUtil(findText("console.daemon.log.message.pattern"));
