@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IoSession;
@@ -17,6 +18,8 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import com.zzvc.mmps.daemon.DaemonMessage;
 
 public class DaemonConsoleClientHandler extends IoHandlerAdapter {
+	private static Logger logger = Logger.getLogger(DaemonConsoleClientHandler.class);
+	
 	@Resource
 	private DaemonConsoleClient client;
 	
@@ -99,6 +102,7 @@ public class DaemonConsoleClientHandler extends IoHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
+		logger.error("Mina reports socket connection error", cause);
 		client.broken();
 	}
 
