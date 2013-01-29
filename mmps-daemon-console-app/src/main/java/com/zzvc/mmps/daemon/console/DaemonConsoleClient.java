@@ -4,11 +4,10 @@ import com.zzvc.mmps.console.ConsoleMessageSupport;
 import com.zzvc.mmps.gui.util.PatternUtil;
 
 public class DaemonConsoleClient extends ConsoleMessageSupport {
+    private static final String LOCALHOST_NAME="localhost";
 
     private String host;
     private int port;
-    
-    private String localhost="localhost";
     
     private PatternUtil patternUtil;
 
@@ -80,19 +79,19 @@ public class DaemonConsoleClient extends ConsoleMessageSupport {
 	}
 	
 	public void infoLocal(String key, Object... args) {
-		infoMessage("console.daemon.log.format", localhost, findText(key, args));
+		infoMessage("console.daemon.log.format", LOCALHOST_NAME, findText(key, args));
 	}
 	
 	public void warnLocal(String key, Object... args) {
-		warnMessage("console.daemon.log.format", localhost, findText(key, args));
+		warnMessage("console.daemon.log.format", LOCALHOST_NAME, findText(key, args));
 	}
 	
 	public void errorLocal(String key, Object... args) {
-		errorMessage("console.daemon.log.format", localhost, findText(key, args));
+		errorMessage("console.daemon.log.format", LOCALHOST_NAME, findText(key, args));
 	}
 	
 	public void statusLocal(String key, Object... args) {
-		statusMessage("console.daemon.log.format", localhost, findText(key, args));
+		statusMessage("console.daemon.log.format", LOCALHOST_NAME, findText(key, args));
 	}
 
 	@Override
