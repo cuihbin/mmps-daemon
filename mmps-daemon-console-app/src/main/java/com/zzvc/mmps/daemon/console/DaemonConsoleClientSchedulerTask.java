@@ -7,7 +7,7 @@ import com.zzvc.mmps.task.TaskSupport;
 
 public class DaemonConsoleClientSchedulerTask extends TaskSupport implements SchedulerTask {
 	@Resource
-	private DaemonConsoleClient client;
+	private DaemonConsoleClientHandler handler;
 
 	public DaemonConsoleClientSchedulerTask() {
 		super();
@@ -16,8 +16,8 @@ public class DaemonConsoleClientSchedulerTask extends TaskSupport implements Sch
 
 	@Override
 	public void onSchedule() {
-		if (client.needConnect()) {
-			client.connect();
+		if (handler.needConnect()) {
+			handler.connect();
 		}
 	}
 

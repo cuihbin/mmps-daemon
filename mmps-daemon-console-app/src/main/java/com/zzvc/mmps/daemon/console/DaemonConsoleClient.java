@@ -1,31 +1,10 @@
 package com.zzvc.mmps.daemon.console;
 
-import static com.zzvc.mmps.daemon.DaemonConstants.DEFAULT_GROUP;
-
-import java.net.InetSocketAddress;
-import java.util.ResourceBundle;
-
-import javax.annotation.Resource;
-
-import org.apache.mina.core.future.ConnectFuture;
-import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
-import org.apache.mina.transport.socket.nio.NioSocketConnector;
-
 import com.zzvc.mmps.console.ConsoleMessageSupport;
-import com.zzvc.mmps.daemon.DaemonMessage;
 import com.zzvc.mmps.gui.util.PatternUtil;
 
 public class DaemonConsoleClient extends ConsoleMessageSupport {
-	@Resource
-	private DaemonConsoleClientHandler handler;
-	
-	private NioSocketConnector connector;
-	private IoSession session;
-	private boolean closed;
-	
-    private String group = DEFAULT_GROUP;
+
     private String host;
     private int port;
     
@@ -39,79 +18,39 @@ public class DaemonConsoleClient extends ConsoleMessageSupport {
 	}
 
 	public void init() {
-		ResourceBundle bundle = ResourceBundle.getBundle("daemon");
-		try {
-			group = bundle.getString("console.daemon.group");
-		} catch (Exception e) {
-		}
-		try {
-			host = bundle.getString("console.daemon.host");
-			port = Integer.parseInt(bundle.getString("console.daemon.port"));
-		} catch (Exception e) {
-		}
-		
-		connector = new NioSocketConnector();
-		connector.setHandler(handler);
-		connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new ObjectSerializationCodecFactory()));
-		
 		try {
 			patternUtil = new PatternUtil(findText("console.daemon.log.message.pattern"));
 		} catch (Exception e) {
 			patternUtil = new PatternUtil();
 		}
 	}
-
-	public boolean isClosed() {
-		return closed;
+	
+	public void setHost(String host) {
+		this.host = host;
 	}
 	
-	public void setClosed(boolean closed) {
-		this.closed = closed;
-	}
-	
-	public boolean needConnect() {
-		return !(isClosed() || isConnected());
-	}
-	
-	public boolean isConnected() {
-		return session != null && session.isConnected();
+	public void setPort(int port) {
+		this.port = port;
 	}
 
-	public boolean connect() {
+	public void connecting() {
 		infoLocal("console.daemon.connect", host);
-        ConnectFuture future = connector.connect(new InetSocketAddress(host, port));
-        future.awaitUninterruptibly();
-        if (!future.isConnected()) {
-        	warnLocal("console.daemon.error.connectfailed", host, port);
-            return false;
-        }
-        session = future.getSession();
-        join();
-        
-        return true;
+		statusLocal("console.daemon.connect", host);
 	}
 	
-	public void join() {
-		session.write(new DaemonMessage(DaemonMessage.CMD_JOIN, group).createMessage());
-	}
-	
-	public void quit() {
-		if (isConnected()) {
-			session.write(new DaemonMessage(DaemonMessage.CMD_QUIT, "").createMessage());
-			session.close(true);
-		}
-		setClosed(true);
+	public void connectFailed() {
+		warnLocal("console.daemon.error.connectfailed", host, port);
+		statusLocal("console.daemon.error.connectfailed", host, port);
 	}
 	
 	public void approved(String daemonAppTitle) {
 		setConsoleTitle(findText("console.daemon.log.format", host, daemonAppTitle));
 		infoLocal("console.daemon.join.approved", host, daemonAppTitle);
 	}
-	
+
 	public void denied() {
 		errorLocal("console.daemon.join.denied", host);
-		session.close(true);
-		setClosed(true);
+		statusLocal("console.daemon.join.denied", host);
 	}
 	
 	public void broken() {

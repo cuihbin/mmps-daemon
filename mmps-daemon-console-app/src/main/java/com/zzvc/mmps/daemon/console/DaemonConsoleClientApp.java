@@ -6,7 +6,7 @@ import com.zzvc.mmps.app.AppSupport;
 
 public class DaemonConsoleClientApp extends AppSupport {
 	@Resource
-	private DaemonConsoleClient client;
+	private DaemonConsoleClientHandler handler;
 
 	public DaemonConsoleClientApp() {
 		super();
@@ -15,12 +15,12 @@ public class DaemonConsoleClientApp extends AppSupport {
 
 	@Override
 	public void afterStartup() {
-		client.init();
-		client.connect();
+		handler.init();
+		handler.connect();
 	}
 
 	@Override
 	public void beforeShutdown() {
-		client.quit();
+		handler.quit();
 	}
 }
